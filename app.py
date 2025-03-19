@@ -1,4 +1,3 @@
-import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
@@ -73,54 +72,34 @@ st.markdown("""
 
 def fetch_attendance(username, password):
     with st.spinner('Fetching your attendance data...'):
-        driver = None  # Prevents UnboundLocalError in case of failure
-
         try:
-            # Install dependencies (needed for Streamlit Cloud)
-            os.system("apt-get update")
-            os.system("apt-get install -y libglib2.0-0 libnss3 libgconf-2-4 libfontconfig1 libxrender1 libxi6 libxcursor1 libxcomposite1 libasound2 libxdamage1 libxtst6 libxrandr2")
-
-            # Ensure ChromeDriver is installed
-            chrome_driver_path = "/usr/bin/chromedriver"
-            if not os.path.exists(chrome_driver_path):
-                os.system("wget https://storage.googleapis.com/chrome-for-testing-public/114.0.5735.90/linux64/chromedriver-linux64.zip")
-                os.system("unzip chromedriver-linux64.zip")
-                os.system("mv chromedriver /usr/bin/chromedriver")
-                os.system("chmod +x /usr/bin/chromedriver")
-
-            # Configure WebDriver options
             options = webdriver.ChromeOptions()
-            options.add_argument("--headless")  # Headless mode for Streamlit Cloud
-            options.add_argument("--no-sandbox")  # Required for running on Streamlit Cloud
-            options.add_argument("--disable-dev-shm-usage")  # Fix shared memory issue
-            options.add_argument("--disable-gpu")  # Improves stability
-            options.add_argument("--remote-debugging-port=9222")  # Debugging support
-
-            service = ChromeService(chrome_driver_path)
+            options.add_argument("--headless")
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--disable-gpu")  # Add this line
+            
+            service = ChromeService(ChromeDriverManager().install())
             driver = webdriver.Chrome(service=service, options=options)
 
-            # Open ERP Login Page
             driver.get("https://learner.pceterp.in/")
-            time.sleep(2)
+            time.sleep(2)  # Increased sleep time
 
-            # Enter username and password
             driver.find_element(By.XPATH, "//input[@type='text']").send_keys(username)
             driver.find_element(By.XPATH, "//input[@type='password']").send_keys(password)
             driver.find_element(By.XPATH, "//button[contains(@class, 'v-btn') and contains(., 'Sign In')]").click()
-            time.sleep(3)
+            time.sleep(3)  # Increased sleep time
 
-            # Navigate to Attendance Page
             driver.get("https://learner.pceterp.in/attendance")
-            time.sleep(3)
+            time.sleep(3)  # Increased sleep time
 
-            # Fetch Student Name
             try:
                 student_name_element = driver.find_element(By.XPATH, "//span[contains(@class, 'ml-3 font-weight-bold text-medium-emphasis')]")
                 student_name = student_name_element.text.strip()
-            except Exception:
+            except Exception as e:
+                st.error(f"Error fetching student name: {e}")
                 student_name = "Unknown"
 
-            # Fetch Attendance Data
             subject_blocks = driver.find_elements(By.XPATH, "//div[contains(@class, 'v-col-sm-4')]")
 
             attendance_records = []
