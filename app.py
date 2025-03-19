@@ -2,7 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 import re
+from selenium.webdriver.chrome.service import Service as ChromeService
 import matplotlib.pyplot as plt
+from webdriver_manager.chrome import ChromeDriverManager
 import io
 import base64
 import streamlit as st
@@ -70,28 +72,32 @@ st.markdown("""
 
 def fetch_attendance(username, password):
     with st.spinner('Fetching your attendance data...'):
-        options = webdriver.ChromeOptions()
-        options.add_argument("--headless")  # Run in headless mode
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        driver = webdriver.Chrome(options=options)
-
         try:
+            options = webdriver.ChromeOptions()
+            options.add_argument("--headless")
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--disable-gpu")  # Add this line
+            
+            service = ChromeService(ChromeDriverManager().install())
+            driver = webdriver.Chrome(service=service, options=options)
+
             driver.get("https://learner.pceterp.in/")
-            time.sleep(1)
+            time.sleep(2)  # Increased sleep time
 
             driver.find_element(By.XPATH, "//input[@type='text']").send_keys(username)
             driver.find_element(By.XPATH, "//input[@type='password']").send_keys(password)
             driver.find_element(By.XPATH, "//button[contains(@class, 'v-btn') and contains(., 'Sign In')]").click()
-            time.sleep(2)
+            time.sleep(3)  # Increased sleep time
 
             driver.get("https://learner.pceterp.in/attendance")
-            time.sleep(2)
+            time.sleep(3)  # Increased sleep time
 
             try:
                 student_name_element = driver.find_element(By.XPATH, "//span[contains(@class, 'ml-3 font-weight-bold text-medium-emphasis')]")
                 student_name = student_name_element.text.strip()
-            except:
+            except Exception as e:
+                st.error(f"Error fetching student name: {e}")
                 student_name = "Unknown"
 
             subject_blocks = driver.find_elements(By.XPATH, "//div[contains(@class, 'v-col-sm-4')]")
