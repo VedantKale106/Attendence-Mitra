@@ -20,11 +20,12 @@ This Streamlit web application helps PCCOE (Pimpri Chinchwad College of Engineer
 - **Responsive Design:** Works well on various screen sizes.
 
 ## Screenshots
+![Image](https://github.com/user-attachments/assets/47a8394a-9781-4a06-8498-daf96610f6f1)
+![Image](https://github.com/user-attachments/assets/75d1d340-0f94-496d-b815-160245ddb6b9)
+![Image](https://github.com/user-attachments/assets/ba503d15-2e02-41a3-afc7-601a68397d75)
 ![Image](https://github.com/user-attachments/assets/fa783f0e-a2eb-4188-831c-68e1a3c042f3)
 ![Image](https://github.com/user-attachments/assets/8e1f66be-2177-4f3c-b17d-779a97cb1f4b)
-![Image](https://github.com/user-attachments/assets/ba503d15-2e02-41a3-afc7-601a68397d75)
-![Image](https://github.com/user-attachments/assets/75d1d340-0f94-496d-b815-160245ddb6b9)
-![Image](https://github.com/user-attachments/assets/47a8394a-9781-4a06-8498-daf96610f6f1)
+
 
 ## Installation
 
