@@ -453,7 +453,7 @@ if login_button:
                     if safe_subjects:
                         st.markdown("#### Subjects with Safe Attendance")
                         st.markdown("These subjects have sufficient attendance:")
-                        for subject in safe_subjects[:5]:  # Show top 5 safe subjects
+                        for subject in safe_subjects[:15]:  # Show top 15 safe subjects
                             classes_can_miss = int((subject["Percentage"] - 75) * subject["Total"] / 75)
                             st.markdown(f"""
                             <div style="padding: 10px; margin-bottom: 5px; background-color: rgba(0, 255, 0, 0.1); border-left: 5px solid green; border-radius: 5px;">
